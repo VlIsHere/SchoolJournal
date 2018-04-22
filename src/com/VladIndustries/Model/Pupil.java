@@ -3,14 +3,16 @@ package com.VladIndustries.Model;
 import com.VladIndustries.MyExceptions.DateAlreadyExistException;
 import com.VladIndustries.MyExceptions.MarkOutOfBoundsException;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Objects;
 
 public class Pupil {
+    private static final String NO_NAME = "NO_NAME";
     private String firstName;//имя
     private String surname;//фамилия
     private String patronymic;//отчество
     private ArrayList<Register> marksPerDay;//оценки по дате
-    private static final String NO_NAME = "NO_NAME";
 
     Pupil(){
         this.firstName = NO_NAME;
@@ -37,18 +39,6 @@ public class Pupil {
 
     public int getCount(){
         return marksPerDay.size();
-    }
-
-//return номер в массиве с указанной датой, если нет - вернёт -1
-    private int containsDate(Calendar date){
-        Register tmp;
-        for (int i = 0; i < marksPerDay.size(); i++) {
-            tmp = marksPerDay.get(i);
-            if (date.compareTo(tmp.date)==0){
-                return i;
-            }
-        }
-        return -1;
     }
 
 //получение оценки по дате; если нет такой даты, то return -1
@@ -130,6 +120,19 @@ public class Pupil {
     @Override
     public String toString() {
         return "Schoolboy:\nFirst name: " + firstName + "\nSurname: " +surname+"\nPatronymic: " + patronymic;
+    }
+
+
+    //return номер в массиве с указанной датой, если нет - вернёт -1
+    private int containsDate(Calendar date){
+        Register tmp;
+        for (int i = 0; i < marksPerDay.size(); i++) {
+            tmp = marksPerDay.get(i);
+            if (date.compareTo(tmp.date)==0){
+                return i;
+            }
+        }
+        return -1;
     }
 
     private class Register{//класс запись, в которой в определённую дату поставлена оценка
