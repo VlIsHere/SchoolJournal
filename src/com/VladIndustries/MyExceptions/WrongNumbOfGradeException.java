@@ -1,6 +1,6 @@
 package com.VladIndustries.MyExceptions;
 
-public class MarkOutOfBoundsException extends BaseException {
+public class WrongNumbOfGradeException extends BaseException {
     /**
      * Returns the detail message string of this throwable.
      *
@@ -14,6 +14,6 @@ public class MarkOutOfBoundsException extends BaseException {
 
     @Override
     public String getLogMessage() {
-        return "com.VladIndustries.MyExceptions.MarkOutOfBoundsException: Mark must be between 1 and 5!";
+        return "com.VladIndustries.MyExceptions.WrongNumbOfGradeException: Numb of grade must be between 1 and 11!";
     }
 }

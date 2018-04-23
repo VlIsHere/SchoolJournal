@@ -19,9 +19,18 @@ package com.VladIndustries;
 //        2) логгировать действия пользователя в файл (когда создали\обновили\удалил
 //        оценку)
 
+import com.VladIndustries.Model.SchoolGrade;
+
+import java.io.File;
+
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args)  {
+        File file = new File("serialFile.txt");
+      //  SchoolGrade a8 = SchoolGrade.deserializeSchoolGrade(file);
+       // SchoolGrade a9 = SchoolGrade.deserializeSchoolGrade(file);
 
+
+        SchoolGrade schoolGrades[] = SchoolGrade.deserializeSchoolGrade(file);
     }
 }

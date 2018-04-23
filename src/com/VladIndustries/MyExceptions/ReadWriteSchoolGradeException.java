@@ -1,6 +1,6 @@
 package com.VladIndustries.MyExceptions;
 
-public class MarkOutOfBoundsException extends BaseException {
+public class ReadWriteSchoolGradeException extends BaseException {
     /**
      * Returns the detail message string of this throwable.
      *
@@ -12,8 +12,9 @@ public class MarkOutOfBoundsException extends BaseException {
         return getLogMessage();
     }
 
+
     @Override
     public String getLogMessage() {
-        return "com.VladIndustries.MyExceptions.MarkOutOfBoundsException: Mark must be between 1 and 5!";
+        return "com.VladIndustries.MyExceptions.ReadWriteSchoolGradeException: Error in class com.VladIndustries.Model.SchoolGrade";
     }
 }

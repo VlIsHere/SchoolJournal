@@ -1,6 +1,6 @@
 package com.VladIndustries.MyExceptions;
 
-public class PupilAlreadyExistException extends Exception {
+public class PupilAlreadyExistException extends BaseException {
     /**
      * Returns the detail message string of this throwable.
      *
@@ -9,6 +9,12 @@ public class PupilAlreadyExistException extends Exception {
      */
     @Override
     public String getMessage() {
-        return "PupilAlreadyExistException: Pupil already exist in Journal!";
+        return getLogMessage();
+    }
+
+
+    @Override
+    public String getLogMessage() {
+        return "com.VladIndustries.MyExceptions.PupilAlreadyExistException: Pupil already exist in Journal!";
     }
 }

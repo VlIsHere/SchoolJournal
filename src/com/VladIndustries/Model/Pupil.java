@@ -3,12 +3,12 @@ package com.VladIndustries.Model;
 import com.VladIndustries.MyExceptions.DateAlreadyExistException;
 import com.VladIndustries.MyExceptions.MarkOutOfBoundsException;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Objects;
+import java.io.Serializable;
+import java.util.*;
 
-public class Pupil {
+public class Pupil implements Serializable{
     private static final String NO_NAME = "NO_NAME";
+    private static final long serialVersionUID = -1011245132329653108L;
     private String firstName;//имя
     private String surname;//фамилия
     private String patronymic;//отчество
@@ -29,16 +29,17 @@ public class Pupil {
         Calendar c = Calendar.getInstance();
         c.set(1996,Calendar.NOVEMBER,4);//default 4November 1996
         for (int i = 0; i < cntDaysForMarks; i++) {
-            marksPerDay.set(i,new Register(c,2));//default marks = 2
+            c.set(1996,Calendar.NOVEMBER,(int)(Math.random()*11));
+            marksPerDay.add(i,new Register(c,(int)(Math.random()*4+1)));//default marks = 2
         }
-    }
-
-    public ArrayList<Register> getRegisters(){
-        return marksPerDay;
     }
 
     public int getCount(){
         return marksPerDay.size();
+    }
+
+    public void sortByDate(){
+        Collections.sort(marksPerDay, Comparator.comparing(Register::getDate));
     }
 
 //получение оценки по дате; если нет такой даты, то return -1
@@ -46,23 +47,41 @@ public class Pupil {
         return containsDate(date);
     }
 
+    public int getMark(int numb){
+        if (numb<marksPerDay.size() && numb>=0) {
+            return marksPerDay.get(numb).mark;
+        }else return -1;
+    }
+
+    public Calendar getDate(int numb){
+        if (numb<marksPerDay.size() && numb>=0) {
+            return marksPerDay.get(numb).date;
+        }else return null;
+    }
+
 //изменение оценки по дате; если нет, то ничего; если оценка неправильная, то exception
     public void setMark(Calendar date,Integer mark) throws MarkOutOfBoundsException {
         if (mark>5 || mark<1) throw new MarkOutOfBoundsException();
         int tmp = containsDate(date);
         if (tmp!=-1) {
-            marksPerDay.set(tmp, new Register(date, mark));
+            marksPerDay.get(tmp).setMark(mark);
         }
     }
 
-    public void createMark(Calendar date,Integer mark) throws MarkOutOfBoundsException,DateAlreadyExistException {
+    public void setMark(int numb, int mark){
+        if (numb<marksPerDay.size() && numb>=0) {
+            marksPerDay.get(numb).setMark(mark);
+        }
+    }
+
+    public void createRegister(Calendar date, Integer mark) throws MarkOutOfBoundsException,DateAlreadyExistException {
         if (mark>5 || mark<1) throw new MarkOutOfBoundsException();
         if (containsDate(date)!=-1) marksPerDay.add(new Register(date,mark));
         else throw new DateAlreadyExistException();
     }
 
 //удалит 1ую запись с указанной датой
-    public void removeMark(Calendar date){
+    public void removeRegister(Calendar date){
         int tmp = containsDate(date);
         if (tmp!=-1) marksPerDay.remove(tmp);
     }
@@ -101,7 +120,8 @@ public class Pupil {
                 Register tmp;
                 while (i<o.getCount()){
                     tmp = o.marksPerDay.get(i);
-                    if (marksPerDay.get(i).mark!=tmp.mark || (marksPerDay.get(i).date.compareTo(tmp.date)!=0)){
+
+                    if (marksPerDay.get(i).mark!=tmp.mark || (marksPerDay.get(i).date.getTime().equals(tmp.date))){//marksPerDay.get(i).date.compareTo(tmp.date)!=0)){
                         break;
                     }
                     i++;
@@ -119,23 +139,27 @@ public class Pupil {
 
     @Override
     public String toString() {
-        return "Schoolboy:\nFirst name: " + firstName + "\nSurname: " +surname+"\nPatronymic: " + patronymic;
+        String s = "PUPIL:\nFirst name: " + firstName + "\nSurname: " +surname+"\nPatronymic: " + patronymic + "\n";
+        for (int i = 0; i < marksPerDay.size(); i++) {
+            s+= marksPerDay.get(i).date.getTime().toString() + " - " + marksPerDay.get(i).mark + "\n";
+        }
+        return s;
     }
-
 
     //return номер в массиве с указанной датой, если нет - вернёт -1
     private int containsDate(Calendar date){
         Register tmp;
         for (int i = 0; i < marksPerDay.size(); i++) {
             tmp = marksPerDay.get(i);
-            if (date.compareTo(tmp.date)==0){
+            if (date.getTime().equals(tmp.date)){
                 return i;
             }
         }
         return -1;
     }
 
-    private class Register{//класс запись, в которой в определённую дату поставлена оценка
+    private class Register implements Serializable{//класс запись, в которой в определённую дату поставлена оценка
+        private static final long serialVersionUID = -5882092467075653443L;
         private Calendar date;
         private Integer mark;
 
@@ -144,6 +168,7 @@ public class Pupil {
             this.date = date;
         }
 
+        //объект урок, в кот будет дата и список учеников, посещающих занятия
         public Calendar getDate(){
             return date;
         }

@@ -1,6 +1,6 @@
 package com.VladIndustries.MyExceptions;
 
-public class DateAlreadyExistException extends Exception {
+public class DateAlreadyExistException extends BaseException{
     /**
      * Returns the detail message string of this throwable.
      *
@@ -9,6 +9,11 @@ public class DateAlreadyExistException extends Exception {
      */
     @Override
     public String getMessage() {
-        return "DateAlreadyExistException: Date already exist in Register!";
+        return getLogMessage();
+    }
+
+    @Override
+    public String getLogMessage() {
+        return "com.VladIndustries.MyExceptions.DateAlreadyExistException: Date already exist in Register!";
     }
 }
