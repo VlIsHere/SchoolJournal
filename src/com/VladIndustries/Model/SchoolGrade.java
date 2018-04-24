@@ -4,6 +4,7 @@ import com.VladIndustries.MyExceptions.ReadWriteSchoolGradeException;
 
 import java.io.*;
 import java.util.HashSet;
+import java.util.Iterator;
 
 public class SchoolGrade implements Serializable{
     private static final long serialVersionUID = -791301372281087262L;
@@ -103,32 +104,27 @@ public class SchoolGrade implements Serializable{
 //        }
 //    }
 
-    public Journal getSchoolJournal(String nameJ){//todo
-//        Iterator<SchoolJournal> iterator = schoolJournalHS.iterator();
-//        SchoolJournal sj = null;
-//        while (iterator.hasNext()){
-//            sj =iterator.next();
-//            if (sj.get.equals(nameJ)) break;
-//        }
-//        return sj;
-        return null;
+    public Journal getSchoolJournal(Journal newj){
+        Iterator<Journal> iterator = schoolJournalHS.iterator();
+        Journal sj = null;
+        while (iterator.hasNext()){
+            sj =iterator.next();
+            if (sj.getClass()==newj.getClass()) break;
+        }
+        return sj;
     }
 
-    public boolean addSchoolJournal(String teacherFIO,String subject,int countScBoys){
-        return schoolJournalHS.add(new PhysicsJournal(teacherFIO,countScBoys));
-    }
-
-    public boolean addSchoolJournal(PhysicsJournal sj){
+    public boolean addSchoolJournal(Journal sj){
         return schoolJournalHS.add(sj);
     }
 
-    public void setSchoolJournal(String nameOldJ,PhysicsJournal newJ){
-        removeSchoolJournal(nameOldJ);
+    public void setSchoolJournal(Journal oldJ,Journal newJ){
+        removeSchoolJournal(oldJ);
         addSchoolJournal(newJ);
     }
 
-    public void removeSchoolJournal(String nameJ){
-        schoolJournalHS.remove(getSchoolJournal(nameJ));
+    public void removeSchoolJournal(Journal j){
+        schoolJournalHS.remove(getSchoolJournal(j));
     }
 
     public int getNumbClass() {
@@ -145,5 +141,12 @@ public class SchoolGrade implements Serializable{
 
     public void setSymbByClass(char symbByClass) {
         this.symbByClass = Character.toUpperCase(symbByClass);
+    }
+
+    @Override
+    public String toString() {
+        String res =  "SchoolGrade: "+ numbClass+ symbByClass ;
+
+        return  res;
     }
 }

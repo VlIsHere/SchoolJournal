@@ -46,17 +46,14 @@ public abstract class Journal implements Serializable {
         lessons.add(new Pair<>(date,pupils));
     }
 
+    public void setPair(Calendar date,Pair<Calendar,ArrayList<Pupil>> pair){
+        int numb = containsDate(date);
+        if (numb!=-1) lessons.set(numb,pair);
+    }
+
     public int getLessonsSize(){
         return lessons.size();
     }
-
-    //добавление оценки
-    public abstract void addMark(Pupil p, Calendar date, int mark) throws PupilAlreadyExistException, MarkOutOfBoundsException, DateAlreadyExistException;
-
-    //удаление оценки по дате
-    public abstract void removeMark(Pupil p,Calendar date) throws PupilAlreadyExistException;
-    //изменение оценки
-    public abstract void setMark(Pupil p,Calendar date, int mark) throws MarkOutOfBoundsException, PupilAlreadyExistException;
 
     //поиск
     public int findPupil(Pupil p){
@@ -66,14 +63,60 @@ public abstract class Journal implements Serializable {
         return -1;
     }
 
+    //добавление оценки
+    public void addMark(Pupil p, Calendar date, int mark) throws PupilAlreadyExistException, MarkOutOfBoundsException, DateAlreadyExistException {
+        int numb = findPupil(p);
+        if (numb!=-1) throw new PupilAlreadyExistException();
+        pupils.get(numb).createRegister(date,mark);
+    }
+
+    //удаление оценки по дате
+    public void removeMark(Pupil p,Calendar date) throws PupilAlreadyExistException {
+        int numb = findPupil(p);
+        if (numb!=-1) throw new PupilAlreadyExistException();
+        pupils.get(numb).removeRegister(date);
+    }
+
+    //изменение оценки
+    public void setMark(Pupil p,Calendar date, int mark) throws MarkOutOfBoundsException, PupilAlreadyExistException {
+        int numb = findPupil(p);
+        if (numb!=-1) throw new PupilAlreadyExistException();
+        pupils.get(numb).setMark(date,mark);
+    }
+
     //удаление
-    public abstract void removePupil(Pupil pupil);
+    public void removePupil(Pupil pupil){
+        if (pupils.contains(pupil)) pupils.remove(pupil);
+    }
 
     //изменение
-    public abstract void setPupil(Pupil newp, Pupil oldp) throws PupilAlreadyExistException;
+    public void setPupil(Pupil newp, Pupil oldp) throws PupilAlreadyExistException {
+        int numb = findPupil(newp);
+        if (numb==-1) throw new PupilAlreadyExistException();
+        pupils.set(numb,newp);
+    }
 
     //добавление
-    public abstract void addPupil(Pupil pupil) throws PupilAlreadyExistException;
+    public void addPupil(Pupil pupil) throws PupilAlreadyExistException {
+        if (pupils.contains(pupil)) throw new PupilAlreadyExistException();
+        pupils.add(pupil);
+    }
+
+    public String getTeacherFIO() {
+        return teacherFIO;
+    }
+
+    public void setTeacherFIO(String teacherFIO) {
+        this.teacherFIO = teacherFIO;
+    }
+
+    public Pupil getPupil(int numb) {
+        return pupils.get(numb);
+    }
+
+    public void setPupils(ArrayList<Pupil> pupils) {
+        this.pupils = pupils;
+    }
 
     public int getSchoolBoysCnt() {
         return pupils.size();
