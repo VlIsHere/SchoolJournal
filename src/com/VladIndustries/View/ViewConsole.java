@@ -44,8 +44,8 @@ public class ViewConsole implements View {
 
     public void start(){
         writeConsole.println("Читаем данные...");
-       // presenter.initialize();
-      //  presenter.serialSchlGrade(presenter.getFileSerial());
+       // presenter.initialize();//заполнил структуру
+        //presenter.serialSchlGrade(presenter.getFileSerial());//сериализовал в файл
         presenter.deserialSchlGrade(presenter.getFileSerial());//then save this changed arr in result file
         writeConsole.print(presenter.getSchoolGradesToString());
         do {
@@ -144,7 +144,7 @@ public class ViewConsole implements View {
         Journal j = selectJournal(scg);
         Calendar c = inputDate();
         String fio = inputFIO();
-        String fio2[] = fio.split(" ");;
+        String fio2[] = fio.split(" ");
         try {
             switch (numb){
                 case 1:
