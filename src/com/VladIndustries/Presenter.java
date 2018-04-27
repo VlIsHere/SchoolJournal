@@ -6,10 +6,9 @@ import com.VladIndustries.MyExceptions.*;
 import java.io.File;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.logging.Logger;
 
 public class Presenter {
-    public static Logger logInfo = Logger.getLogger("LogInfoInFile");
+    //public static Logger logInfo = Logger.getLogger("LogInfoInFile");
     private File fileSerial;
     private SchoolGrade[] scG;
 

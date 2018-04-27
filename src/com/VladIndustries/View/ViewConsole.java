@@ -154,7 +154,7 @@ public class ViewConsole implements View {
                             + j.getTeacherFIO() + "; Date = " +c.getTime() + "for Pupil - " + fio);
                     if (presenter.addMarkByDate(numGrade,letter,j,c,new Pupil(fio2[0],fio2[1],fio2[2]),mark)) {
                         writeFile.println("success");
-                    }
+                    } else writeFile.println("failed operation");
                     break;//"1) Добавление оценки");
                 case 2:
                     writeFile.println(LocalDateTime.now() + " try to remove mark in SchoolGrade: " + numGrade
@@ -162,7 +162,7 @@ public class ViewConsole implements View {
                             + "; Date = " +c.getTime() + "for Pupil - " + fio);
                     if (presenter.removeMarkByDate(numGrade,letter,j,c,new Pupil(fio2[0],fio2[1],fio2[2]))){
                         writeFile.println("success");
-                    }
+                    } else writeFile.println("failed operation");
                     break; //"2) Удаление оценки");
                 case 3:
                     mark =inputMark();
@@ -171,8 +171,11 @@ public class ViewConsole implements View {
                             + j.getTeacherFIO() + "; Date = " +c.getTime() + "for Pupil - " + fio);
                     if (presenter.setMarkByDate(numGrade,letter,j,c,new Pupil(fio2[0],fio2[1],fio2[2]),mark)){
                         writeFile.println("success");
-                    }
+                    } else writeFile.println("failed operation");
                     break;//"3) Изменение оценки");
+                case 4:
+                    presenter.getSchoolGradesToString();
+                    break;
                 default:
                     return false;
             }
