@@ -18,19 +18,20 @@ package com.VladIndustries;
 //        1) логгировать ошибки в файл
 //        2) логгировать действия пользователя в файл (когда создали\обновили\удалил
 //        оценку)
-import com.VladIndustries.View.View;
+import com.VladIndustries.MyExceptions.MarkOutOfBoundsException;
+import com.VladIndustries.View.ViewConsole;
 
 import java.io.File;
 
 public class Main {
 
-    public static void main(String[] args)  {
+    public static void main(String[] args) throws MarkOutOfBoundsException {
         File fileSerial = new File("serialFile.txt");
         File fileInfo = new File("infoAboutChanges.txt");
         File fileResult = new File("serialResult.txt");
-        View view = new View();
-        view.initialize(fileSerial,fileInfo,System.out,System.in);
-        view.start();
-        view.destroy();
+        ViewConsole viewConsole = new ViewConsole();
+        viewConsole.initialize(fileResult,fileSerial,fileInfo,System.out,System.in);
+        viewConsole.start();
+        viewConsole.destroy();
     }
 }

@@ -1,13 +1,20 @@
 package com.VladIndustries.Model;
 
-public class MathJournal extends Journal {
+import java.io.Serializable;
+
+public class MathJournal extends Journal implements Serializable {
+
+    @Override
+    public String getNameSubject() {
+        return "МАТЕМАТИКА";
+    }
 
     public MathJournal(PhysicsJournal sj) {
         super(sj);
     }
 
-    public MathJournal(String teacherFIO, int cntScBoys, int cntLessons) {
-        super(teacherFIO, cntScBoys, cntLessons);
+    public MathJournal(String teacherFIO, int cntLessons) {
+        super(teacherFIO, cntLessons);
     }
 
 }

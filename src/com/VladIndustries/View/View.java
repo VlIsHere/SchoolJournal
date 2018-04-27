@@ -1,46 +1,35 @@
 package com.VladIndustries.View;
 
-import com.VladIndustries.Presenter;
+import com.VladIndustries.Model.Journal;
+import com.VladIndustries.Model.SchoolGrade;
 
-import java.io.*;
-import java.util.Scanner;
+import java.io.File;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Calendar;
 
-public class View {
-    private Presenter presenter;
-    private PrintWriter writeConsole;
-    private PrintWriter writeFile;
-    private Scanner reader;
+public interface View {
+    void initialize(File fileResult, File fileSerial, File fileInfo, OutputStream os, InputStream is);
 
-    public void initialize(File fileSerial,File fileInfo, OutputStream os, InputStream is){
-        presenter = new Presenter(fileSerial);
-        writeConsole = new PrintWriter(os);
-        try {
-            writeFile = new PrintWriter(fileInfo);
-        } catch (FileNotFoundException e) {
-            try {
-                fileInfo.createNewFile();
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
-        }
-        reader = new Scanner(is);
-    }
+    void start();
 
-    public void start(){
-        writeConsole.println("Инициализация...");
-       presenter.serialSchlGrade(presenter.getFileSerial(),presenter.initialize());
-       // SchoolGrade[] sc = presenter.deserialSchlGrade(presenter.getFileSerial());
-        writeConsole.println();
+    void destroy();
 
-    }
+    String inputFIO();
 
-    public void destroy(){
-        reader.close();
-        writeConsole.close();
-        writeFile.close();
-    }
+    Calendar inputDate();
 
-    public void printResult(){
+    int inputMark();
 
-    }
+    int askUser();
+
+    int inputNumGrade();
+
+    char inputLetter();
+
+    Journal selectJournal(SchoolGrade scg);
+
+    boolean menuMethods(int numb);
+
+    void printMenu();
 }

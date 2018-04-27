@@ -20,14 +20,13 @@ public abstract class BaseException extends Exception {
                 file.createNewFile();
             } catch (IOException e1) {
             }
-        } catch (IOException e) {
         }
 
     }
 
     public abstract String getLogMessage();
 
-   private void logging(PrintWriter writer) throws IOException {
+   private void logging(PrintWriter writer) {
         myLogger.info(getLogMessage());
         writer.printf("\n%s: %s\n", LocalDateTime.now(), getLogMessage());
         writer.flush();

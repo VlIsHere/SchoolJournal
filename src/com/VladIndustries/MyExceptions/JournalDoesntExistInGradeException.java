@@ -1,6 +1,6 @@
 package com.VladIndustries.MyExceptions;
 
-public class WrongNumbOfGradeException extends BaseException {
+public class JournalDoesntExistInGradeException extends BaseException {
     /**
      * Returns the detail message string of this throwable.
      *
@@ -14,6 +14,6 @@ public class WrongNumbOfGradeException extends BaseException {
 
     @Override
     public String getLogMessage() {
-        return "com.VladIndustries.MyExceptions.WrongNumbOfGradeException: Numb of grade must be between 1 and 11!";
+        return "com.VladIndustries.MyExceptions.JournalDoesntExistInGradeException: Wrong journal!";
     }
 }

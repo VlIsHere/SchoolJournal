@@ -1,28 +1,110 @@
 package com.VladIndustries.Model;
 
-import com.VladIndustries.MyExceptions.ReadWriteSchoolGradeException;
+import com.VladIndustries.MyExceptions.*;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Iterator;
 
 public class SchoolGrade implements Serializable{
     private static final long serialVersionUID = -791301372281087262L;
-    private HashSet<Journal> schoolJournalHS;//потом организовать порядок предметов в schooljournal
+    private HashSet<Journal> schoolJournalHS;
+    protected ArrayList<Pupil> pupils;//список учеников
     private int numbClass;
     private char symbByClass;
 
     public SchoolGrade() {
+        this.pupils = new ArrayList<>();
         this.schoolJournalHS = new HashSet<>();
         this.numbClass = 0;
         this.symbByClass = 'A';
     }
 
-    public SchoolGrade(int numbClass, char symbByClass) {
+    public SchoolGrade(int numbClass, char symbByClass, int cntPupils) {
         this.schoolJournalHS = new HashSet<>();
+        this.pupils = new ArrayList<>(cntPupils);
         this.numbClass = numbClass;
         this.symbByClass = symbByClass;
     }
+
+    public Journal findJournal(Journal j){
+        if (schoolJournalHS.contains(j)){
+            for (Journal jrn: schoolJournalHS){
+                if (jrn.equals(j)) return jrn;
+            }
+        }
+        return  null;
+    }
+
+    public boolean addRegister(Journal j,Calendar date, Pupil p, int mark) throws PupilDoesntExistInGradeException, JournalDoesntExistInGradeException, MarkOutOfBoundsException {
+        if (findPupil(p)!=-1) {
+            Journal jrn = findJournal(j);
+            if (jrn!=null){
+               return jrn.addRegister(date,p,mark);
+            } else throw new JournalDoesntExistInGradeException();
+        }else throw new PupilDoesntExistInGradeException();
+    }
+
+    //удаление ЗАПИСИ оценки по дате
+    public boolean removeRegister(Journal j,Calendar date,Pupil p)throws PupilDoesntExistInGradeException, JournalDoesntExistInGradeException{
+        if (findPupil(p)!=-1) {
+            Journal jrn = findJournal(j);
+            if (jrn!=null){
+                return jrn.removeRegister(date,p);
+            }else throw new JournalDoesntExistInGradeException();
+        }else throw new PupilDoesntExistInGradeException();
+    }
+
+    //изменение оценки в записи
+    public boolean setRegister(Journal j,Calendar date,Pupil p,int mark) throws JournalDoesntExistInGradeException, PupilDoesntExistInGradeException, MarkOutOfBoundsException {
+        if (findPupil(p)!=-1) {
+            Journal jrn = findJournal(j);
+            if (jrn!=null){
+               return jrn.setRegister(date,p,mark);
+            }else throw new JournalDoesntExistInGradeException();
+        }else throw new PupilDoesntExistInGradeException();
+    }
+
+    //поиск по списку учеников
+    public int findPupil(Pupil p) {
+        for (int i = 0; i < pupils.size(); i++) {
+            if (pupils.get(i).equals(p)) return i;
+        }
+        return -1;
+    }
+
+    //удаление ученика
+    public void removePupil(Pupil pupil) {
+        pupils.remove(pupil);
+    }
+
+    //изменение ученика
+    public void setPupil(Pupil newp, Pupil oldp) throws PupilAlreadyExistException {
+        int numb = findPupil(newp);
+        if (numb == -1) throw new PupilAlreadyExistException();
+        pupils.set(numb, newp);
+    }
+
+    //добавление ученика
+    public void addPupil(Pupil pupil) throws PupilAlreadyExistException {
+        if (pupils.contains(pupil)) throw new PupilAlreadyExistException();
+        pupils.add(pupil);
+    }
+
+    public Pupil getPupil(int numb) {
+        return pupils.get(numb);
+    }
+
+    public void setPupils(ArrayList<Pupil> pupils) {
+        this.pupils = pupils;
+    }
+
+    public int getSchoolBoysCnt() {
+        return pupils.size();
+    }
+
 
     public static void serializeSchoolGrade(File file,SchoolGrade... scGr){
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file))){
@@ -104,15 +186,26 @@ public class SchoolGrade implements Serializable{
 //        }
 //    }
 
-    public Journal getSchoolJournal(Journal newj){
-        Iterator<Journal> iterator = schoolJournalHS.iterator();
-        Journal sj = null;
-        while (iterator.hasNext()){
-            sj =iterator.next();
-            if (sj.getClass()==newj.getClass()) break;
+    public Journal getSchoolJournal(Journal j){
+//        Iterator<Journal> iterator = schoolJournalHS.iterator();
+//        Journal sj = null;
+//        while (iterator.hasNext()){
+//            sj =iterator.next();
+//            if (sj.getClass()==j.getClass()) break;
+//        }
+        for (Journal sj : schoolJournalHS){
+            if (sj.getClass()==j.getClass()) return sj;
         }
-        return sj;
+        return null;
     }
+
+    public Journal getSchoolJournal(String name){
+        for (Journal sj: schoolJournalHS){
+            if (sj.getNameSubject().equals(name)) return sj;
+        }
+        return null;
+    }
+
 
     public boolean addSchoolJournal(Journal sj){
         return schoolJournalHS.add(sj);
@@ -145,8 +238,14 @@ public class SchoolGrade implements Serializable{
 
     @Override
     public String toString() {
-        String res =  "SchoolGrade: "+ numbClass+ symbByClass ;
-
+        String res =  getClass()+": "+ numbClass+ symbByClass + "\n" + "Pupils:\n";
+        for (int i = 0; i < pupils.size(); i++) {
+            res+=pupils.get(i).toString() + "\n";
+        }
+        Iterator<Journal> iter = schoolJournalHS.iterator();
+        while (iter.hasNext()){
+            res+=iter.next().toString() + "\n";
+        }
         return  res;
     }
 }
