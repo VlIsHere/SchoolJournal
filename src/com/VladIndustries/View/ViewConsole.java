@@ -191,5 +191,6 @@ public class ViewConsole implements View {
         writeConsole.println("1) Добавление оценки");
         writeConsole.println("2) Удаление оценки");
         writeConsole.println("3) Изменение оценки");
+        writeConsole.println("4) Вывести классы");
     }
 }
